@@ -1,0 +1,16 @@
+Function arrayAppend(Arr As Variant, new_value As Variant) As Variant
+
+    length_array = UBound(Arr)
+
+    Dim arr_out
+    ReDim arr_out(length_array + 1)
+
+    For i = 0 To length_array
+        arr_out(i) = Arr(i)
+    Next i
+
+    arr_out(length_array + 1) = new_value
+
+    arrayAppend = arr_out
+    
+End Function
