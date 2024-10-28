@@ -1,0 +1,63 @@
+Sub ReimportAllModules()
+
+    'Need Microsoft Visual Basic For Applications Extensability
+    Dim fpath As Variant
+    Dim mName As Variant
+    
+    'Main directory for macros
+    file_dir = "C:\Users\Brandon\Documents\Projects\.vba\"
+     
+    'Name of files
+    array_fpath = Array("ArrayFunctions.bas", _
+                        "DB.bas")
+    'Name of modules
+    array_mname = Array("ArrayFunctions", _
+                        "DB")
+                          
+                      
+    For i = 0 To UBound(array_fpath)
+        array_fpath(i) = file_dir & array_fpath(i)
+        array_mname(i) = array_mname(i)
+    Next i
+                        
+
+    'For each file, remove the current module and reimport
+    For i = 0 To UBound(array_mname)
+        mName = array_mname(i)
+        fpath = array_fpath(i)
+        
+        On Error Resume Next
+        Call RemoveModule(mName)
+        On Error GoTo 0
+        
+        Call Importer(fpath, mName)
+    Next i
+
+    
+End Sub
+
+
+
+Function Importer(file_path As Variant, moduleName As Variant)
+    'Import modules from file
+    Dim vbComp As VBComponent
+    Dim str_moduleName As String
+
+    str_moduleName = CStr(moduleName)
+
+    Set vbComp = Application.VBE.ActiveVBProject.VBComponents.Import(file_path)
+    vbComp.Name = str_moduleName
+End Function
+
+
+
+
+Function RemoveModule(moduleName As Variant)
+    'Remove current module from vba workbook
+    Dim vbComp As Object
+         
+    Set vbComp = Application.VBE.ActiveVBProject.VBComponents
+    
+    vbComp.Remove VBComponent:=vbCom.Item(moduleName)
+
+End Function
